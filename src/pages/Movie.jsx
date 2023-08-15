@@ -1,64 +1,72 @@
-import { useState, useEffect } from "react"
-import { useParams } from "react-router-dom"
-import {  BsGraphUp, BsWallet2, BsHourglassSplit, BsFillFileEarmarkTextFill, BsFillTagFill, BsCalendar2Fill, BsPeopleFill } from "react-icons/bs"
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import {
+  BsGraphUp,
+  BsWallet2,
+  BsHourglassSplit,
+  BsFillFileEarmarkTextFill,
+  BsFillTagFill,
+  BsCalendar2Fill,
+  BsPeopleFill,
+} from "react-icons/bs";
 
-import MovieCard from "../components/MovieCard"
+import MovieCard from "../components/MovieCard";
 
-import "./Movie.css"
+import "./Movie.css";
 
-const moviesURL = import.meta.env.VITE_API
-const apiKey = import.meta.env.VITE_API_KEY
+const moviesURL = import.meta.env.VITE_API;
+const apiKey = import.meta.env.VITE_API_KEY;
 
 const Movie = () => {
-  const {id} = useParams()
-  const [movie, setMovie] = useState(null)
-  const [genre, setGenre] = useState("")
-  const [cast, setCast] = useState([])
-  const [director, setDirector] = useState("")
+  const { id } = useParams();
+  const [movie, setMovie] = useState(null);
+  const [genre, setGenre] = useState("");
+  const [cast, setCast] = useState([]);
+  const [director, setDirector] = useState("");
 
-  const getMovie = async(url) => {
-    const res = await fetch(url)
-    const data = await res.json()
+  const getMovie = async (url) => {
+    const res = await fetch(url);
+    const data = await res.json();
 
-    setMovie(data)
-    setGenre(data.genres[0].name)
-  }
+    setMovie(data);
+    setGenre(data.genres[0].name);
+  };
 
   const getCast = async (url) => {
-    const res = await fetch(url)
-    const data = await res.json()
+    const res = await fetch(url);
+    const data = await res.json();
 
-    setCast(data.cast)
-  }
+    setCast(data.cast);
+  };
 
   const getDirector = async (url) => {
-    const res = await fetch(url)
-    const data = await res.json()
+    const res = await fetch(url);
+    const data = await res.json();
 
-    const director = data.crew.find(member => member.job === "Director")
+    const director = data.crew.find((member) => member.job === "Director");
     if (director) {
-      setDirector(director.name)
+      setDirector(director.name);
     }
-  }
+  };
 
   const formatCurrency = (number) => {
     return number.toLocaleString("en-US", {
       style: "currency",
       currency: "USD",
-    })
-  }
+    });
+  };
 
   const releaseYear = movie ? new Date(movie.release_date).getFullYear() : null;
 
   useEffect(() => {
-    const movieUrl = `${moviesURL}${id}?${apiKey}&language=pt-BR`
-    const castUrl = `${moviesURL}${id}/credits?${apiKey}`
-    const directorUrl = `${moviesURL}${id}/credits?${apiKey}`
-    
-    getMovie(movieUrl)
-    getCast(castUrl)
-    getDirector(directorUrl)
-  }, [])
+    const movieUrl = `${moviesURL}${id}?${apiKey}&language=pt-BR`;
+    const castUrl = `${moviesURL}${id}/credits?${apiKey}`;
+    const directorUrl = `${moviesURL}${id}/credits?${apiKey}`;
+
+    getMovie(movieUrl);
+    getCast(castUrl);
+    getDirector(directorUrl);
+  }, []);
 
   return (
     <div className="movie-page">
@@ -70,9 +78,7 @@ const Movie = () => {
             <h3>
               <BsFillTagFill /> Genêro:
             </h3>
-            <p>
-              {genre}
-            </p>
+            <p>{genre}</p>
           </div>
           <div className="info">
             <h3>
@@ -98,7 +104,8 @@ const Movie = () => {
             {director && (
               <div className="director">
                 <h3>
-                  <BsPeopleFill />Diretor:
+                  <BsPeopleFill />
+                  Diretor:
                 </h3>
                 <p>{director}</p>
               </div>
@@ -125,7 +132,7 @@ const Movie = () => {
         </>
       )}
     </div>
-  )
-}
-  
-export default Movie
+  );
+};
+
+export default Movie;
